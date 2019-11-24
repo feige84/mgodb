@@ -31,7 +31,7 @@ func TestExecute(t *testing.T) {
 
 	result := []Person{}
 	//普通查询
-	err = collection.Find(bson.M{"name": "zhangzheHero"}).Sort("name").All(&result)
+	err = collection.Find(bson.M{"name": "zhangzheHero"}).Sort("phone").All(&result)
 	fmt.Println(result)
 
 	//一次可以插入多个对象 插入两个Person对象
@@ -46,10 +46,10 @@ func TestExecute(t *testing.T) {
 	//}
 
 	//更新
-	//err = collection.Update(bson.M{"name": "zhangzheHero"}, bson.M{"$set": bson.M{"phone": "13988888888"}})
-	//if err != nil {
-	//	panic(err)
-	//}
+	err = collection.Update(bson.M{"name": "zhangzheHero"}, bson.M{"$set": bson.M{"phone2": "13988888888"}})
+	if err != nil {
+		panic(err)
+	}
 
 	//删除
 	//err = collection.Remove(bson.M{"name":"Ale"})
