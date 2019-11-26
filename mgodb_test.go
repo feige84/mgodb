@@ -7,8 +7,8 @@ import (
 
 func TestExecute(t *testing.T) {
 
-	mgoDb, err := NewMgoDb("mongodb://127.0.0.1:27017/dds", "dds", 1000, 100) //mg.Dial("127.0.0.1:27017") //连接数据库
-	//mgoDb, err := NewMgoDb("mongodb://amge:Shenma123@dds-bp1facc1c14b89841489-pub.mongodb.rds.aliyuncs.com:3717/dds", "dds", 1000, 100) //mg.Dial("127.0.0.1:27017") //连接数据库
+	mgoDb, err := NewMgoDb("mongodb://127.0.0.1:27017/dds", "dds", 1000, 100) //mgo.Dial("127.0.0.1:27017") //连接数据库
+	//mgoDb, err := NewMgoDb("mongodb://amge:Shenma123@dds-bp1facc1c14b89841489-pub.mongodb.rds.aliyuncs.com:3717/dds", "dds", 1000, 100) //mgo.Dial("127.0.0.1:27017") //连接数据库
 	if err != nil {
 		panic(err)
 	}

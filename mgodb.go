@@ -2,7 +2,7 @@ package mgodb
 
 import (
 	"fmt"
-	"mgodb/mg"
+	"mgodb/mgo"
 	"runtime/debug"
 	"time"
 )
@@ -12,19 +12,19 @@ var MgoDb *MgDbLib
 type DbRow map[string]interface{}
 
 type MgDbLib struct {
-	Session    *mg.Session
-	Db         *mg.Database
-	Collection *mg.Collection
+	Session    *mgo.Session
+	Db         *mgo.Database
+	Collection *mgo.Collection
 	Debug      bool
 }
 
 func NewMgoDb(dsn, dbName string, poolLimit, poolTimeout int) (*MgDbLib, error) {
-	session, err := mg.Dial(dsn) //连接数据库
+	session, err := mgo.Dial(dsn) //连接数据库
 	if err != nil {
 		return nil, fmt.Errorf("mongodb connect error: %s\n%s", err, debug.Stack())
 	}
 	//defer session.Close()
-	session.SetMode(mg.Monotonic, true)
+	session.SetMode(mgo.Monotonic, true)
 	session.SetSocketTimeout(10 * time.Second)
 	if poolLimit > 0 {
 		session.SetPoolLimit(poolLimit)
@@ -43,12 +43,12 @@ func NewMgoDb(dsn, dbName string, poolLimit, poolTimeout int) (*MgDbLib, error) 
 	return s, nil
 }
 
-func (s *MgDbLib) DB(dbName string) *mg.Database {
+func (s *MgDbLib) DB(dbName string) *mgo.Database {
 	s.Db = s.Session.DB(dbName)
 	return s.Db
 }
 
-func (s *MgDbLib) C(collection string) *mg.Collection {
+func (s *MgDbLib) C(collection string) *mgo.Collection {
 	if s.Db == nil {
 		s.Db = s.DB("") // use default
 	}
