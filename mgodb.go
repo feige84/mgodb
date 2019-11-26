@@ -2,10 +2,9 @@ package mgodb
 
 import (
 	"fmt"
+	"mgodb/mgo"
 	"runtime/debug"
 	"time"
-
-	"github.com/globalsign/mgo"
 )
 
 var MgoDb *MgDbLib
