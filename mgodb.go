@@ -2,7 +2,7 @@ package mgodb
 
 import (
 	"fmt"
-	"mgodb/mgo"
+	"mgodb/mg"
 	"runtime/debug"
 	"time"
 )
