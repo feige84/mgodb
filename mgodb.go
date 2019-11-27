@@ -2,7 +2,7 @@ package mgodb
 
 import (
 	"fmt"
-	"mgodb/mg"
+	"github.com/globalsign/mgo"
 	"runtime/debug"
 	"time"
 )
