@@ -5,7 +5,7 @@ import (
 	"sort"
 	"sync"
 
-	"mgodb/mgo/bson"
+	"mgodb/mg/bson"
 )
 
 // Bulk represents an operation that can be prepared with several

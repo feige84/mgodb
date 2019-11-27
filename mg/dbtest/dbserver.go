@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"gopkg.in/tomb.v2"
-	mgo "mgodb/mgo"
+	mgo "mgodb/mg"
 )
 
 // DBServer controls a MongoDB server process to be used within test suites.

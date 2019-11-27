@@ -2,7 +2,7 @@
 //
 // Detailed documentation of the API is available at GoDoc:
 //
-//     https://godoc.org/mgodb/mgo
+//     https://godoc.org/mgodb/mg
 //
 // Usage of the driver revolves around the concept of sessions.  To
 // get started, obtain a session using the Dial function:
@@ -28,7 +28,7 @@
 // There is a sub-package that provides support for BSON, which can be
 // used by itself as well:
 //
-//    https://godoc.org/mgodb/mgo/bson
+//    https://godoc.org/mgodb/mg/bson
 //
 // For more details, see the documentation for the types and methods.
 //

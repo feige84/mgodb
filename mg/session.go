@@ -45,7 +45,7 @@ import (
 	"sync"
 	"time"
 
-	"mgodb/mgo/bson"
+	"mgodb/mg/bson"
 )
 
 // Mode read preference mode. See Eventual, Monotonic and Strong for details

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"mgodb/mgo/bson"
+	"mgodb/mg/bson"
 )
 
 type FullDocument string

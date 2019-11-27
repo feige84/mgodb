@@ -33,7 +33,7 @@ import (
 	"sync"
 	"time"
 
-	"mgodb/mgo/bson"
+	"mgodb/mg/bson"
 )
 
 // coarseTime is used to amortise the cost of querying the timecounter (possibly

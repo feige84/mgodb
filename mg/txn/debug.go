@@ -6,7 +6,7 @@ import (
 	"sort"
 	"sync/atomic"
 
-	"mgodb/mgo/bson"
+	"mgodb/mg/bson"
 )
 
 var (

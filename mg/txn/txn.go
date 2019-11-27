@@ -14,9 +14,9 @@ import (
 	"strings"
 	"sync"
 
-	mgo "mgodb/mgo"
+	mgo "mgodb/mg"
 
-	"mgodb/mgo/bson"
+	"mgodb/mg/bson"
 
 	crand "crypto/rand"
 	mrand "math/rand"

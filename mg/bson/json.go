@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"mgodb/mgo/internal/json"
+	"mgodb/mg/internal/json"
 )
 
 // UnmarshalJSON unmarshals a JSON value that may hold non-standard
