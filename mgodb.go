@@ -20,7 +20,7 @@ type MgDbLib struct {
 }
 
 func NewMgoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle uint64, useSecond bool) (*MgDbLib, error) {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/dds")
+	clientOptions := options.Client().ApplyURI(dsn)
 	//链接mongo服务
 	clientOptions.SetLocalThreshold(3 * time.Second) //只使用与mongo操作耗时小于3秒的
 	if maxConnIdle > 0 {
