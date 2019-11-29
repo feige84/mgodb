@@ -214,7 +214,7 @@ func (m *MongoClient) Count(collection string, filter PageFilter) (c int64, err 
 	return collections.CountDocuments(m.Ctx, filter.Filter, opt)
 }
 
-func (m *MongoClient) GetAll(collection string, filter PageFilter) (e []interface{}, err error) {
+func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cursor, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -241,21 +241,7 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (e []interfac
 		opt.SetSort(bson.M{filter.SortBy: filter.SortMode})
 	}
 	//cursor, err = collection.Find(getContext(), bson.M{"createtime": bson.M{"$gte": 2}}, options.Find().SetLimit(2), options.Find().SetSort(bson.M{"createtime": -1}));
-	ret, err := collections.Find(m.Ctx, filter.Filter, opt)
-	defer ret.Close(m.Ctx)
-	if err == nil {
-		for ret.Next(m.Ctx) {
-			var data interface{}
-			if err = ret.Decode(&data); err != nil {
-				return
-			}
-			e = append(e, data)
-		}
-	}
-	//if err == nil {
-	//	err = ret.All(m.Ctx, &e)
-	//}
-	return
+	return collections.Find(m.Ctx, filter.Filter, opt)
 }
 
 func (m *MongoClient) DeleteOne(collection string, Selector bson.M) (int64, error) {

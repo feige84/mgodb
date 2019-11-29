@@ -43,7 +43,7 @@ func TestExecute(t *testing.T) {
 	fmt.Println("person:", person, err)
 
 	//findmany
-	personDb, err := mg.GetAll("dy_test", PageFilter{
+	ret, err := mg.GetAll("dy_test", PageFilter{
 		SortBy:     "name",
 		SortMode:   -1,
 		Limit:      2,
@@ -51,17 +51,24 @@ func TestExecute(t *testing.T) {
 		Filter:     bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}},
 		RegexFiler: nil,
 	})
-	for _, v := range personDb {
-		//fmt.Println(v.(primitive.D))
-		if p, ok := v.(primitive.D); ok {
-			d := p.Map()
-			if id, ok := d["id"]; ok {
-				a := fmt.Sprint(id)
-				fmt.Printf("id:%T", a)
-			}
-		}
+	arr := []Person{}
+
+	ret.All(mg.Ctx, &arr)
+	//for ret.Next(mg.Ctx) {
+	//	var p Person
+	//	err := ret.Decode(&p)
+	//	if err != nil {
+	//		panic(err)
+	//	}
+	//	//dd := p.(Person)
+	//	fmt.Println(p.Name)
+	//}
+	//err = ret.All(mg.Ctx, &personDb)
+	for _, v := range arr {
+
+		fmt.Println(v.Name)
+
 	}
-	//personDb := []interface{}{}
 	//result, err := c.Find(context.TODO(), bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}})
 	//if err != nil {
 	//	panic(err)
@@ -70,7 +77,7 @@ func TestExecute(t *testing.T) {
 	//if err != nil {
 	//	panic(err)
 	//}
-	fmt.Println("personDb", personDb, err)
+	fmt.Println("personDb2", arr, err)
 	//
 	////insert
 	//doc := Person{
