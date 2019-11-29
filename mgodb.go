@@ -244,8 +244,17 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (e []interfac
 	ret, err := collections.Find(m.Ctx, filter.Filter, opt)
 	defer ret.Close(m.Ctx)
 	if err == nil {
-		err = ret.All(m.Ctx, &e)
+		for ret.Next(m.Ctx) {
+			var data interface{}
+			if err = ret.Decode(&data); err != nil {
+				return
+			}
+			e = append(e, data)
+		}
 	}
+	//if err == nil {
+	//	err = ret.All(m.Ctx, &e)
+	//}
 	return
 }
 

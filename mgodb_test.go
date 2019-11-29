@@ -3,13 +3,14 @@ package mgodb
 import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
 )
 
 type Person struct {
-	Id   int64  `json:"id" bson:"id"`
-	Name string `json:"name" bson:"name"`
+	ObjectID primitive.ObjectID `bson:"_id"`
+	Id       int64              `json:"id" bson:"id"`
+	Name     string             `json:"name" bson:"name"`
 }
 
 func TestExecute(t *testing.T) {
@@ -50,6 +51,12 @@ func TestExecute(t *testing.T) {
 		Filter:     bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}},
 		RegexFiler: nil,
 	})
+	for _, v := range personDb {
+		//fmt.Println(v.(primitive.D))
+		if p, ok := v.(primitive.D); ok {
+			fmt.Println("aa:", p.Map())
+		}
+	}
 	//personDb := []interface{}{}
 	//result, err := c.Find(context.TODO(), bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}})
 	//if err != nil {
@@ -60,69 +67,69 @@ func TestExecute(t *testing.T) {
 	//	panic(err)
 	//}
 	fmt.Println("personDb", personDb, err)
-
-	//insert
-	doc := Person{
-		Id:   333334,
-		Name: "xxxxxxxxxxxgggg",
-	}
-	ret, err := mg.InsertOne("dy_test", doc)
-	//person = Person{
-	//	Id:   12345,
-	//	Name: "angel",
+	//
+	////insert
+	//doc := Person{
+	//	Id:   333334,
+	//	Name: "xxxxxxxxxxxgggg",
 	//}
-	//ret, err := c.InsertOne(context.TODO(), person)
-	//if err != nil {
-	//	panic(err)
-	//}
-	fmt.Println(ret, err)
-
-	//insert many
-	personDb = []interface{}{}
-	personDb = append(personDb, Person{
-		Id:   22222333,
-		Name: "ghjfghjghj",
-	})
-	personDb = append(personDb, Person{
-		Id:   333333335553,
-		Name: "xdfgsdfg",
-	})
-	insertOpt := options.InsertMany()
-	insertOpt.SetOrdered(false)
-	rets, err := mg.InsertMany("dy_test", personDb, insertOpt)
-	//rets, err := c.InsertMany(context.TODO(), personDb, insertOpt)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//fmt.Println(rets.InsertedIDs)
-	fmt.Println(rets, err)
-
-	//update
-	result2, err := mg.UpdateOne("dy_test", bson.M{"id": 222}, bson.M{"name": "12348765"})
-	//result2, err := c.UpdateOne(context.TODO(), bson.M{"id": 222}, bson.M{"$set": bson.M{"name": "12348765"}})
-	//if err != nil {
-	//	panic(err)
-	//}
-	fmt.Println(result2, err)
-
-	//update many
-	opt := options.Update().SetUpsert(false)
-	result3, err := mg.UpdateMany("dy_test", bson.M{"id": 22222}, bson.M{"name": "12348765"}, opt)
-	fmt.Println(result3, err)
-
-	//delete
-	result4, err := mg.DeleteOne("dy_test", bson.M{"id": 22222})
-	//result4, err := c.DeleteOne(context.TODO(), bson.M{"id": 222})
-	//if err != nil {
-	//	panic(err)
-	//}
-	fmt.Println(result4, err)
-
-	//deletemany
-	result5, err := mg.DeleteMany("dy_test", bson.M{"id": 333334})
-	//result5, err := c.DeleteMany(context.TODO(), bson.M{"id": 12345})
-	//if err != nil {
-	//	panic(err)
-	//}
-	fmt.Println(result5, err)
+	//ret, err := mg.InsertOne("dy_test", doc)
+	////person = Person{
+	////	Id:   12345,
+	////	Name: "angel",
+	////}
+	////ret, err := c.InsertOne(context.TODO(), person)
+	////if err != nil {
+	////	panic(err)
+	////}
+	//fmt.Println(ret, err)
+	//
+	////insert many
+	//personDb = []interface{}{}
+	//personDb = append(personDb, Person{
+	//	Id:   22222333,
+	//	Name: "ghjfghjghj",
+	//})
+	//personDb = append(personDb, Person{
+	//	Id:   333333335553,
+	//	Name: "xdfgsdfg",
+	//})
+	//insertOpt := options.InsertMany()
+	//insertOpt.SetOrdered(false)
+	//rets, err := mg.InsertMany("dy_test", personDb, insertOpt)
+	////rets, err := c.InsertMany(context.TODO(), personDb, insertOpt)
+	////if err != nil {
+	////	panic(err)
+	////}
+	////fmt.Println(rets.InsertedIDs)
+	//fmt.Println(rets, err)
+	//
+	////update
+	//result2, err := mg.UpdateOne("dy_test", bson.M{"id": 222}, bson.M{"name": "12348765"})
+	////result2, err := c.UpdateOne(context.TODO(), bson.M{"id": 222}, bson.M{"$set": bson.M{"name": "12348765"}})
+	////if err != nil {
+	////	panic(err)
+	////}
+	//fmt.Println(result2, err)
+	//
+	////update many
+	//opt := options.Update().SetUpsert(false)
+	//result3, err := mg.UpdateMany("dy_test", bson.M{"id": 22222}, bson.M{"name": "12348765"}, opt)
+	//fmt.Println(result3, err)
+	//
+	////delete
+	//result4, err := mg.DeleteOne("dy_test", bson.M{"id": 22222})
+	////result4, err := c.DeleteOne(context.TODO(), bson.M{"id": 222})
+	////if err != nil {
+	////	panic(err)
+	////}
+	//fmt.Println(result4, err)
+	//
+	////deletemany
+	//result5, err := mg.DeleteMany("dy_test", bson.M{"id": 333334})
+	////result5, err := c.DeleteMany(context.TODO(), bson.M{"id": 12345})
+	////if err != nil {
+	////	panic(err)
+	////}
+	//fmt.Println(result5, err)
 }
