@@ -54,7 +54,11 @@ func TestExecute(t *testing.T) {
 	for _, v := range personDb {
 		//fmt.Println(v.(primitive.D))
 		if p, ok := v.(primitive.D); ok {
-			fmt.Println("aa:", p.Map())
+			d := p.Map()
+			if id, ok := d["id"]; ok {
+				a := fmt.Sprint(id)
+				fmt.Printf("id:%T", a)
+			}
 		}
 	}
 	//personDb := []interface{}{}
