@@ -36,10 +36,10 @@ type MongoClient struct {
 	Ctx        context.Context
 }
 
-func NewMongoDb(dsn, dbName string, poolSize, maxConnIdle uint64, useSecond bool) (*MongoClient, error) {
+func NewMongoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle uint64, useSecond bool) (*MongoClient, error) {
 	//var once sync.Once
 	//once.Do(func() {
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	//ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	//defer cancel() // bug may happen
 
 	clientOptions := options.Client().ApplyURI(dsn)
