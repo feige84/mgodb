@@ -32,7 +32,7 @@ func TestExecute(t *testing.T) {
 	fmt.Println("count:", num, err)
 
 	//findone
-	person, err := mg.GetOne("dy_test", bson.M{"id": 1111})
+	res, err := mg.GetOne("dy_test", bson.M{"id": 1111})
 	//person := Person{}
 	//if err := c.FindOne(context.TODO(), bson.D{{"id", 1111}}).Decode(&person); err != nil {
 	//	panic(err)
@@ -40,7 +40,10 @@ func TestExecute(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("person:", person, err)
+	pp := Person{}
+	res.Decode(&pp)
+
+	fmt.Println("person:", pp.Name, err)
 
 	//findmany
 	ret, err := mg.GetAll("dy_test", PageFilter{

@@ -172,7 +172,7 @@ func (m *MongoClient) Get(collection, id string) (e BaseEntity, err error) {
 	return
 }
 
-func (m *MongoClient) GetOne(collection string, Selector bson.M) (e interface{}, err error) {
+func (m *MongoClient) GetOne(collection string, Selector bson.M) (result *mongo.SingleResult, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -183,8 +183,7 @@ func (m *MongoClient) GetOne(collection string, Selector bson.M) (e interface{},
 		}
 	}()
 	collections := m.Database.Collection(collection)
-	result := collections.FindOne(m.Ctx, Selector)
-	err = result.Decode(&e)
+	result = collections.FindOne(m.Ctx, Selector)
 	return
 }
 
