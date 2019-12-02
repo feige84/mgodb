@@ -116,6 +116,25 @@ func (m *MongoClient) C(collection string) *mongo.Collection {
 //	return err, ""
 //}
 
+func (m *MongoClient) ReplaceOne(collection string, Selector bson.M, doc interface{}, opt ...*options.ReplaceOptions) (interface{}, error) {
+	var err error
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(error)
+			if !ok {
+				debug.PrintStack()
+			}
+		}
+	}()
+	collections := m.Database.Collection(collection)
+	result, err := collections.ReplaceOne(m.Ctx, Selector, doc, opt...)
+	if err != nil {
+		return 0, err
+	}
+	return result.ModifiedCount, nil
+}
+
 func (m *MongoClient) InsertOne(collection string, doc interface{}) (interface{}, error) {
 	var err error
 	defer func() {

@@ -1,9 +1,11 @@
 package mgodb
 
 import (
+	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"testing"
 )
 
@@ -15,13 +17,21 @@ type Person struct {
 
 func TestExecute(t *testing.T) {
 	//https://www.mongodb.com/blog/post/mongodb-go-driver-tutorial
-	mg, err := NewMongoDb(fmt.Sprintf("mongodb://%s:%d/%s?readPreference=secondaryPreferred", "127.0.0.1", 27017, "dds"), "dds", 100, 10, true)
+	mg, err := NewMongoDb("mongodb://127.0.0.1:27017/dds", "dds", context.TODO(), 100, 10, true)
 	//mg, err := NewMgoDb(fmt.Sprintf("mongodb://%s:%d/%s?readPreference=secondaryPreferred", "127.0.0.1", 27017, "dds"), "dds", context.TODO(), 100, 10, true)
 	if err != nil {
 		panic(err)
 	}
 
 	//c := mg.C("dy_test")
+	doc := Person{
+		Id:   11121,
+		Name: "xxxxxxxxxxxgggg",
+	}
+	replaceOpt := options.Replace().SetUpsert(true)
+	ret2, err := mg.ReplaceOne("dy_test", bson.M{"id": doc.Id}, doc, replaceOpt)
+	fmt.Println(ret2, err)
+	return
 
 	//count
 	num, err := mg.Count("dy_test", PageFilter{})
