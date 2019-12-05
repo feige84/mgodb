@@ -44,7 +44,7 @@ func NewMongoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle u
 
 	clientOptions := options.Client().ApplyURI(dsn)
 	//链接mongo服务
-	clientOptions.SetLocalThreshold(3 * time.Second) //只使用与mongo操作耗时小于3秒的
+	//clientOptions.SetLocalThreshold(3 * time.Second) //只使用与mongo操作耗时小于3秒的
 	if maxConnIdle > 0 {
 		clientOptions.SetMaxConnIdleTime(time.Duration(maxConnIdle) * time.Second) //指定连接可以保持空闲的最大秒数
 	}
