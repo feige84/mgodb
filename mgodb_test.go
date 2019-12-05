@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"testing"
 )
 
@@ -24,14 +23,14 @@ func TestExecute(t *testing.T) {
 	}
 
 	//c := mg.C("dy_test")
-	doc := Person{
-		Id:   11121,
-		Name: "xxxxxxxxxxxgggg",
-	}
-	replaceOpt := options.Replace().SetUpsert(true)
-	ret2, err := mg.ReplaceOne("dy_test", bson.M{"id": doc.Id}, doc, replaceOpt)
-	fmt.Println(ret2, err)
-	return
+	//doc := Person{
+	//	Id:   11121,
+	//	Name: "xxxxxxxxxxxgggg",
+	//}
+	//replaceOpt := options.Replace().SetUpsert(true)
+	//ret2, err := mg.ReplaceOne("dy_test", bson.M{"id": doc.Id}, doc, replaceOpt)
+	//fmt.Println(ret2, err)
+	//return
 
 	//count
 	num, err := mg.Count("dy_test", PageFilter{})
@@ -40,6 +39,7 @@ func TestExecute(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("count:", num, err)
+	return
 
 	//findone
 	res, err := mg.GetOne("dy_test", bson.M{"id": 1111})

@@ -69,7 +69,13 @@ func NewMongoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle u
 	}
 
 	// Check the connection
-	if err = client.Ping(ctx, nil); err != nil {
+	var rp *readpref.ReadPref
+	if useSecond {
+		rp = readpref.Secondary()
+	} else {
+		rp = readpref.Primary()
+	}
+	if err = client.Ping(ctx, rp); err != nil {
 		return nil, fmt.Errorf("mongodb ping error: %s\n%s", err, debug.Stack())
 	}
 
