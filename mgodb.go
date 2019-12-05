@@ -27,6 +27,7 @@ type PageFilter struct {
 	Skip       int64
 	Filter     map[string]interface{}
 	RegexFiler map[string]string
+	Projection bson.D //only certain fields
 }
 
 type MongoClient struct {
@@ -197,7 +198,7 @@ func (m *MongoClient) Get(collection, id string) (e BaseEntity, err error) {
 	return
 }
 
-func (m *MongoClient) GetOne(collection string, Selector bson.M) (result *mongo.SingleResult, err error) {
+func (m *MongoClient) GetOne(collection string, filter PageFilter) (result *mongo.SingleResult, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -207,8 +208,23 @@ func (m *MongoClient) GetOne(collection string, Selector bson.M) (result *mongo.
 			}
 		}
 	}()
+	if filter.RegexFiler != nil {
+		for k, v := range filter.RegexFiler {
+			filter.Filter[k] = primitive.Regex{Pattern: v, Options: ""}
+		}
+	}
 	collections := m.Database.Collection(collection)
-	result = collections.FindOne(m.Ctx, Selector)
+	opt := options.FindOne()
+	if filter.Skip > 0 {
+		opt.SetSkip(filter.Skip)
+	}
+	if filter.SortBy != "" {
+		opt.SetSort(bson.M{filter.SortBy: filter.SortMode})
+	}
+	if filter.Projection != nil || len(filter.Projection) > 0 {
+		opt.SetProjection(filter.Projection)
+	}
+	result = collections.FindOne(m.Ctx, filter.Filter, opt)
 	return
 }
 
@@ -263,6 +279,9 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cur
 	}
 	if filter.SortBy != "" {
 		opt.SetSort(bson.M{filter.SortBy: filter.SortMode})
+	}
+	if filter.Projection != nil || len(filter.Projection) > 0 {
+		opt.SetProjection(filter.Projection)
 	}
 	//cursor, err = collection.Find(getContext(), bson.M{"createtime": bson.M{"$gte": 2}}, options.Find().SetLimit(2), options.Find().SetSort(bson.M{"createtime": -1}));
 	return collections.Find(m.Ctx, filter.Filter, opt)

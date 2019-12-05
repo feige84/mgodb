@@ -21,7 +21,6 @@ func TestExecute(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
 	//c := mg.C("dy_test")
 	//doc := Person{
 	//	Id:   11121,
@@ -39,10 +38,9 @@ func TestExecute(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("count:", num, err)
-	return
 
 	//findone
-	res, err := mg.GetOne("dy_test", bson.M{"id": 1111})
+	res, err := mg.GetOne("dy_test", PageFilter{Filter: bson.M{"id": 1111}, Projection: bson.D{{"id", 1}}})
 	//person := Person{}
 	//if err := c.FindOne(context.TODO(), bson.D{{"id", 1111}}).Decode(&person); err != nil {
 	//	panic(err)
@@ -53,7 +51,8 @@ func TestExecute(t *testing.T) {
 	pp := Person{}
 	res.Decode(&pp)
 
-	fmt.Println("person:", pp.Name, err)
+	fmt.Println("person:", pp.Id, err)
+	return
 
 	//findmany
 	ret, err := mg.GetAll("dy_test", PageFilter{
