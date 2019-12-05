@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
 )
 
 type Person struct {
-	ObjectID primitive.ObjectID `bson:"_id"`
-	Id       int64              `json:"id" bson:"id"`
-	Name     string             `json:"name" bson:"name"`
+	//ObjectID primitive.ObjectID `bson:"_id"`
+	Id   int64  `json:"id" bson:"id"`
+	Name string `json:"name" bson:"name"`
+	Age  int64  `json:"age" bson:"age"`
 }
 
 func TestExecute(t *testing.T) {
@@ -39,48 +39,51 @@ func TestExecute(t *testing.T) {
 	}
 	fmt.Println("count:", num, err)
 
-	//findone
-	res, err := mg.GetOne("dy_test", PageFilter{Filter: bson.M{"id": 1111}, Projection: bson.D{{"id", 1}}})
-	//person := Person{}
-	//if err := c.FindOne(context.TODO(), bson.D{{"id", 1111}}).Decode(&person); err != nil {
+	xx, err := mg.UpdateInc("dy_test", bson.M{"id": 99888899}, bson.D{{"age", -1}})
+	fmt.Println(xx, err)
+	//
+	////findone
+	//res, err := mg.GetOne("dy_test", PageFilter{Filter: bson.M{"id": 1111}, Projection: bson.D{{"id", 1}}})
+	////person := Person{}
+	////if err := c.FindOne(context.TODO(), bson.D{{"id", 1111}}).Decode(&person); err != nil {
+	////	panic(err)
+	////}
+	//if err != nil {
 	//	panic(err)
 	//}
-	if err != nil {
-		panic(err)
-	}
-	pp := Person{}
-	res.Decode(&pp)
-
-	fmt.Println("person:", pp.Id, err)
-	return
+	//pp := Person{}
+	//res.Decode(&pp)
+	//
+	//fmt.Println("person:", pp.Id, err)
+	//	return
 
 	//findmany
-	ret, err := mg.GetAll("dy_test", PageFilter{
-		SortBy:     "name",
-		SortMode:   -1,
-		Limit:      2,
-		Skip:       0,
-		Filter:     bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}},
-		RegexFiler: nil,
-	})
-	arr := []Person{}
-
-	ret.All(mg.Ctx, &arr)
-	//for ret.Next(mg.Ctx) {
-	//	var p Person
-	//	err := ret.Decode(&p)
-	//	if err != nil {
-	//		panic(err)
-	//	}
-	//	//dd := p.(Person)
-	//	fmt.Println(p.Name)
+	//ret, err := mg.GetAll("dy_test", PageFilter{
+	//	SortBy:     "name",
+	//	SortMode:   -1,
+	//	Limit:      2,
+	//	Skip:       0,
+	//	Filter:     bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}},
+	//	RegexFiler: nil,
+	//})
+	//arr := []Person{}
+	//
+	//ret.All(mg.Ctx, &arr)
+	////for ret.Next(mg.Ctx) {
+	////	var p Person
+	////	err := ret.Decode(&p)
+	////	if err != nil {
+	////		panic(err)
+	////	}
+	////	//dd := p.(Person)
+	////	fmt.Println(p.Name)
+	////}
+	////err = ret.All(mg.Ctx, &personDb)
+	//for _, v := range arr {
+	//
+	//	fmt.Println(v.Name)
+	//
 	//}
-	//err = ret.All(mg.Ctx, &personDb)
-	for _, v := range arr {
-
-		fmt.Println(v.Name)
-
-	}
 	//result, err := c.Find(context.TODO(), bson.M{"id": bson.M{"$in": []int64{1111, 2222, 11111114}}})
 	//if err != nil {
 	//	panic(err)
@@ -89,23 +92,24 @@ func TestExecute(t *testing.T) {
 	//if err != nil {
 	//	panic(err)
 	//}
-	fmt.Println("personDb2", arr, err)
+	//fmt.Println("personDb2", arr, err)
 	//
 	////insert
 	//doc := Person{
-	//	Id:   333334,
+	//	Id:   99888899,
 	//	Name: "xxxxxxxxxxxgggg",
+	//	Age:  33,
 	//}
-	//ret, err := mg.InsertOne("dy_test", doc)
-	////person = Person{
-	////	Id:   12345,
-	////	Name: "angel",
-	////}
-	////ret, err := c.InsertOne(context.TODO(), person)
-	////if err != nil {
-	////	panic(err)
-	////}
-	//fmt.Println(ret, err)
+	//retx, err := mg.InsertOne("dy_test", doc)
+	//person := Person{
+	//	Id:   12345,
+	//	Name: "angel",
+	//}
+	//ret, err := c.InsertOne(context.TODO(), person)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(retx, err)
 	//
 	////insert many
 	//personDb = []interface{}{}

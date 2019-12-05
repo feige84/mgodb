@@ -326,6 +326,25 @@ func (m *MongoClient) DeleteMany(collection string, Selector bson.M) (int64, err
 	// result, err := collections.DeleteMany(ctx, bson.M{"phone": primitive.Regex{Pattern: "456", Options: ""}})
 }
 
+func (m *MongoClient) UpdateInc(collection string, selector bson.M, data bson.D, opt ...*options.UpdateOptions) (int64, error) {
+	var err error
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(error)
+			if !ok {
+				debug.PrintStack()
+			}
+		}
+	}()
+	collections := m.Database.Collection(collection)
+	result, err := collections.UpdateOne(m.Ctx, selector, bson.D{{"$inc", data}}, opt...)
+	if err != nil {
+		return 0, err
+	}
+	return result.ModifiedCount, nil
+}
+
 func (m *MongoClient) UpdateOne(collection string, selector, data bson.M, opt ...*options.UpdateOptions) (int64, error) {
 	var err error
 	defer func() {
