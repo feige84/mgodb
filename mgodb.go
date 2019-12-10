@@ -22,8 +22,7 @@ type BaseEntity interface {
 }
 
 type PageFilter struct {
-	SortBy     string
-	SortMode   int8
+	SortBy     interface{}
 	Limit      int64
 	Skip       int64
 	Filter     map[string]interface{}
@@ -230,8 +229,8 @@ func (m *MongoClient) GetOne(collection string, filter PageFilter) (result *mong
 	if filter.Skip > 0 {
 		opt.SetSkip(filter.Skip)
 	}
-	if filter.SortBy != "" {
-		opt.SetSort(bson.M{filter.SortBy: filter.SortMode})
+	if filter.SortBy != nil {
+		opt.SetSort(filter.SortBy)
 	}
 	if filter.Projection != nil || len(filter.Projection) > 0 {
 		opt.SetProjection(filter.Projection)
@@ -289,8 +288,8 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cur
 	if filter.Limit > 0 {
 		opt.SetLimit(filter.Limit)
 	}
-	if filter.SortBy != "" {
-		opt.SetSort(bson.M{filter.SortBy: filter.SortMode})
+	if filter.SortBy != nil {
+		opt.SetSort(filter.SortBy)
 	}
 	if filter.Projection != nil || len(filter.Projection) > 0 {
 		opt.SetProjection(filter.Projection)
