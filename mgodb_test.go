@@ -3,7 +3,7 @@ package mgodb
 import (
 	"context"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 	"testing"
 )
 
@@ -16,7 +16,7 @@ type Person struct {
 
 func TestExecute(t *testing.T) {
 	//https://www.mongodb.com/blog/post/mongodb-go-driver-tutorial
-	mg, err := NewMongoDb("mongodb://127.0.0.1:27017/dds", "dds", context.TODO(), 100, 10, true)
+	mg, err := NewMongoDb("mongodb://127.0.0.1:27017/dds", "dds", context.TODO(), 100, 10, true, writeconcern.New(writeconcern.W(0)))
 	//mg, err := NewMgoDb(fmt.Sprintf("mongodb://%s:%d/%s?readPreference=secondaryPreferred", "127.0.0.1", 27017, "dds"), "dds", context.TODO(), 100, 10, true)
 	if err != nil {
 		panic(err)
@@ -39,8 +39,8 @@ func TestExecute(t *testing.T) {
 	}
 	fmt.Println("count:", num, err)
 
-	xx, err := mg.UpdateInc("dy_test", bson.M{"id": 99888899}, bson.D{{"age", -1}})
-	fmt.Println(xx, err)
+	//xx, err := mg.UpdateInc("dy_test", bson.M{"id": 99888899}, bson.D{{"age", -1}})
+	//fmt.Println(xx, err)
 	//
 	////findone
 	//res, err := mg.GetOne("dy_test", PageFilter{Filter: bson.M{"id": 1111}, Projection: bson.D{{"id", 1}}})
@@ -95,12 +95,13 @@ func TestExecute(t *testing.T) {
 	//fmt.Println("personDb2", arr, err)
 	//
 	////insert
-	//doc := Person{
-	//	Id:   99888899,
-	//	Name: "xxxxxxxxxxxgggg",
-	//	Age:  33,
-	//}
-	//retx, err := mg.InsertOne("dy_test", doc)
+	doc := Person{
+		Id:   9988889922,
+		Name: "xxxxxxxxxxxgggg",
+		Age:  33,
+	}
+	retx, err := mg.InsertOne("dy_test", doc)
+	fmt.Println("retx:", retx, err)
 	//person := Person{
 	//	Id:   12345,
 	//	Name: "angel",

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 	"runtime/debug"
 	"time"
 
@@ -37,7 +38,7 @@ type MongoClient struct {
 	Ctx        context.Context
 }
 
-func NewMongoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle uint64, useSecond bool) (*MongoClient, error) {
+func NewMongoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle uint64, useSecond bool, wc *writeconcern.WriteConcern) (*MongoClient, error) {
 	//var once sync.Once
 	//once.Do(func() {
 	//ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
@@ -60,9 +61,20 @@ func NewMongoDb(dsn, dbName string, ctx context.Context, poolSize, maxConnIdle u
 		}
 		clientOptions.SetReadPreference(want) //表示只使用辅助节点
 	}
-	//wc := writeconcern.New(writeconcern.WMajority())
-	//clientOptions.SetWriteConcern(wc)                    //请求确认写操作传播到大多数mongod实例
-
+	if wc != nil {
+		//wc := writeconcern.New(writeconcern.W(0))
+		clientOptions.SetWriteConcern(wc) //请求确认写操作传播到大多数mongod实例
+		//	MongoDB支持的WriteConncern选项如下
+		//
+		//w: 数据写入到number个节点才向用客户端确认
+		//	{w: 0} 对客户端的写入不需要发送任何确认，适用于性能要求高，但不关注正确性的场景
+		//	{w: 1} 默认的writeConcern，数据写入到Primary就向客户端发送确认
+		//	{w: “majority”} 数据写入到副本集大多数成员后向客户端发送确认，适用于对数据安全性要求比较高的场景，该选项会降低写入性能
+		//j: 写入操作的journal持久化后才向客户端确认
+		//	默认为”{j: false}，如果要求Primary写入持久化了才向客户端确认，则指定该选项为true
+		//wtimeout: 写入超时时间，仅w的值大于1时有效。
+		//	当指定{w: }时，数据需要成功写入number个节点才算成功，如果写入过程中有节点故障，可能导致这个条件一直不能满足，从而一直不能向客户端发送确认结果，针对这种情况，客户端可设置wtimeout选项来指定超时时间，当写入过程持续超过该时间仍未结束，则认为写入失败。
+	}
 	// Connect to MongoDB
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
