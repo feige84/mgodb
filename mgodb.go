@@ -289,7 +289,7 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cur
 		opt.SetLimit(filter.Limit)
 	}
 	if filter.SortBy != nil {
-		opt.SetSort(filter.SortBy)
+		opt.SetSort(filter.SortBy) //bson.M{filter.SortBy: filter.SortMode}
 	}
 	if filter.Projection != nil || len(filter.Projection) > 0 {
 		opt.SetProjection(filter.Projection)
