@@ -3,6 +3,7 @@ package mgodb
 import (
 	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 	"testing"
 )
@@ -101,6 +102,9 @@ func TestExecute(t *testing.T) {
 		Age:  33,
 	}
 	retx, err := mg.InsertOne("dy_test", doc)
+	if err == mongo.ErrUnacknowledgedWrite {
+		fmt.Println("xxxx")
+	}
 	fmt.Println("retx:", retx, err)
 	//person := Person{
 	//	Id:   12345,
