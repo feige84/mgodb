@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 	"testing"
 )
 
@@ -17,7 +16,7 @@ type Person struct {
 
 func TestExecute(t *testing.T) {
 	//https://www.mongodb.com/blog/post/mongodb-go-driver-tutorial
-	mg, err := NewMongoDb("mongodb://127.0.0.1:27017/dds", "dds", context.TODO(), 100, 10, true, writeconcern.New(writeconcern.W(0)))
+	mg, err := NewMongoDb("mongodb://root:Shenma123@dds-bp16fd95e0dade041654-pub.mongodb.rds.aliyuncs.com:3717,dds-bp16fd95e0dade042254-pub.mongodb.rds.aliyuncs.com:3717,dds-bp16fd95e0dade043282-pub.mongodb.rds.aliyuncs.com:3717,dds-bp16fd95e0dade044388-pub.mongodb.rds.aliyuncs.com:3717/admin?replicaSet=mgset-18489149", "dds", context.TODO(), 100, 10, true, nil)
 	//mg, err := NewMgoDb(fmt.Sprintf("mongodb://%s:%d/%s?readPreference=secondaryPreferred", "127.0.0.1", 27017, "dds"), "dds", context.TODO(), 100, 10, true)
 	if err != nil {
 		panic(err)

@@ -209,6 +209,32 @@ func (m *MongoClient) Get(collection, id string) (e BaseEntity, err error) {
 	return
 }
 
+func (m *MongoClient) Count(collection string, filter PageFilter) (c int64, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(error)
+			if !ok {
+				debug.PrintStack()
+			}
+		}
+	}()
+	if filter.RegexFiler != nil {
+		for k, v := range filter.RegexFiler {
+			filter.Filter[k] = primitive.Regex{Pattern: v, Options: ""}
+		}
+	}
+	collections := m.Database.Collection(collection)
+	opt := options.Count()
+	if filter.Skip > 0 {
+		opt.SetSkip(filter.Skip)
+	}
+	if filter.Limit > 0 {
+		opt.SetLimit(filter.Limit)
+	}
+	return collections.CountDocuments(m.Ctx, filter.Filter, opt)
+}
+
 func (m *MongoClient) GetOne(collection string, filter PageFilter) (result *mongo.SingleResult, err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -237,32 +263,6 @@ func (m *MongoClient) GetOne(collection string, filter PageFilter) (result *mong
 	}
 	result = collections.FindOne(m.Ctx, filter.Filter, opt)
 	return
-}
-
-func (m *MongoClient) Count(collection string, filter PageFilter) (c int64, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				debug.PrintStack()
-			}
-		}
-	}()
-	if filter.RegexFiler != nil {
-		for k, v := range filter.RegexFiler {
-			filter.Filter[k] = primitive.Regex{Pattern: v, Options: ""}
-		}
-	}
-	collections := m.Database.Collection(collection)
-	opt := options.Count()
-	if filter.Skip > 0 {
-		opt.SetSkip(filter.Skip)
-	}
-	if filter.Limit > 0 {
-		opt.SetLimit(filter.Limit)
-	}
-	return collections.CountDocuments(m.Ctx, filter.Filter, opt)
 }
 
 func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cursor, err error) {
