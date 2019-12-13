@@ -16,7 +16,7 @@ type Person struct {
 
 func TestExecute(t *testing.T) {
 	//https://www.mongodb.com/blog/post/mongodb-go-driver-tutorial
-	mg, err := NewMongoDb("mongodb://127.0.0.1:999/admin?replicaSet=mgset-18489149", "dds", context.TODO(), 100, 10, true, nil)
+	mg, err := NewMongoDb("mongodb://127.0.0.1:3717/admin?replicaSet=mgset-18489149", "dds", context.TODO(), 100, 10, true, nil)
 	//mg, err := NewMgoDb(fmt.Sprintf("mongodb://%s:%d/%s?readPreference=secondaryPreferred", "127.0.0.1", 27017, "dds"), "dds", context.TODO(), 100, 10, true)
 	if err != nil {
 		panic(err)

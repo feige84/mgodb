@@ -22,6 +22,7 @@ type BaseEntity interface {
 }
 
 type PageFilter struct {
+	Hint       interface{}
 	SortBy     interface{}
 	Limit      int64
 	Skip       int64
@@ -293,6 +294,9 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cur
 	}
 	if filter.Projection != nil || len(filter.Projection) > 0 {
 		opt.SetProjection(filter.Projection)
+	}
+	if filter.Hint != nil {
+		opt.SetHint(filter.Hint)
 	}
 	//cursor, err = collection.Find(getContext(), bson.M{"createtime": bson.M{"$gte": 2}}, options.Find().SetLimit(2), options.Find().SetSort(bson.M{"createtime": -1}));
 	return collections.Find(m.Ctx, filter.Filter, opt)
