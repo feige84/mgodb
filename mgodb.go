@@ -302,6 +302,37 @@ func (m *MongoClient) GetAll(collection string, filter PageFilter) (c *mongo.Cur
 	return collections.Find(m.Ctx, filter.Filter, opt)
 }
 
+func (m *MongoClient) Aggregate(collection string, pipeline mongo.Pipeline) (c *mongo.Cursor, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(error)
+			if !ok {
+				debug.PrintStack()
+			}
+		}
+	}()
+	collections := m.Database.Collection(collection)
+	opt := options.Aggregate()
+	//if filter.Skip > 0 {
+	//	opt.SetSkip(filter.Skip)
+	//}
+	//if filter.Limit > 0 {
+	//	opt.SetLimit(filter.Limit)
+	//}
+	//if filter.SortBy != nil {
+	//	opt.SetSort(filter.SortBy) //bson.M{filter.SortBy: filter.SortMode}
+	//}
+	//if filter.Projection != nil || len(filter.Projection) > 0 {
+	//	opt.SetProjection(filter.Projection)
+	//}
+	//if filter.Hint != nil {
+	//	opt.SetHint(filter.Hint)
+	//}
+	//cursor, err = collection.Find(getContext(), bson.M{"createtime": bson.M{"$gte": 2}}, options.Find().SetLimit(2), options.Find().SetSort(bson.M{"createtime": -1}));
+	return collections.Aggregate(m.Ctx, pipeline, opt)
+}
+
 func (m *MongoClient) DeleteOne(collection string, Selector bson.M) (int64, error) {
 	var err error
 	defer func() {
