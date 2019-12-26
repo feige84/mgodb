@@ -193,7 +193,7 @@ func (m *MongoClient) InsertMany(collection string, docs []interface{}, opt ...*
 	// result, err := collections.DeleteMany(ctx, bson.M{"phone": primitive.Regex{Pattern: "456", Options: ""}})
 }
 
-func (m *MongoClient) Get(collection, id string) (e BaseEntity, err error) {
+func (m *MongoClient) Get(collection, id string) (result *mongo.SingleResult, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			var ok bool
@@ -205,8 +205,7 @@ func (m *MongoClient) Get(collection, id string) (e BaseEntity, err error) {
 	}()
 	collections := m.Database.Collection(collection)
 	objID, _ := primitive.ObjectIDFromHex(id)
-	result := collections.FindOne(m.Ctx, bson.M{"_id": objID})
-	err = result.Decode(&e)
+	result = collections.FindOne(m.Ctx, bson.M{"_id": objID})
 	return
 }
 
