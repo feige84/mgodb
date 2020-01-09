@@ -232,6 +232,9 @@ func (m *MongoClient) Count(collection string, filter PageFilter) (c int64, err 
 	if filter.Limit > 0 {
 		opt.SetLimit(filter.Limit)
 	}
+	if filter.Hint != nil {
+		opt.SetHint(filter.Hint)
+	}
 	return collections.CountDocuments(m.Ctx, filter.Filter, opt)
 }
 
@@ -260,6 +263,9 @@ func (m *MongoClient) GetOne(collection string, filter PageFilter) (result *mong
 	}
 	if filter.Projection != nil || len(filter.Projection) > 0 {
 		opt.SetProjection(filter.Projection)
+	}
+	if filter.Hint != nil {
+		opt.SetHint(filter.Hint)
 	}
 	result = collections.FindOne(m.Ctx, filter.Filter, opt)
 	return
