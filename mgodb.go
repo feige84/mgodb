@@ -154,7 +154,7 @@ func (m *MongoClient) ReplaceOne(collection string, Selector bson.M, doc interfa
 	return result.ModifiedCount, nil
 }
 
-func (m *MongoClient) InsertOne(collection string, doc interface{}) (interface{}, error) {
+func (m *MongoClient) InsertOne(collection string, doc interface{}, opt ...*options.InsertOneOptions) (interface{}, error) {
 	var err error
 	defer func() {
 		if r := recover(); r != nil {
@@ -166,7 +166,7 @@ func (m *MongoClient) InsertOne(collection string, doc interface{}) (interface{}
 		}
 	}()
 	collections := m.Database.Collection(collection)
-	result, err := collections.InsertOne(m.Ctx, doc)
+	result, err := collections.InsertOne(m.Ctx, doc, opt...)
 	if err != nil {
 		return 0, err
 	}
